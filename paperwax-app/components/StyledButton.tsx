@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary.background
     }, 
     secondary: {
-        backgroundColor: Colors.primary.backgroundSecondary
+        backgroundColor: Colors.dark.container
     }, 
     invisible: {
         backgroundColor: 'transparent',

@@ -1,34 +1,35 @@
-import { TabBarIcon } from '@/components/navigation/TabBarIcon'
+import ActionContainer from '@/components/checkIn/ActionContainer'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
-import { Ionicons } from '@expo/vector-icons'
+import { Link } from 'expo-router'
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 
 export default function checkIn() {
     return (
-        <ThemedView>
-            <ThemedText type='title' style={styles.title}>Registrar entradas</ThemedText>
+        <ThemedView style={styles.container}>
+            <ThemedText style={{marginTop: 10}} type='title'>Registrar</ThemedText>
+            <ThemedText>Para registrar una entrada, primero seleccione el tipo de registro</ThemedText>
 
-            <View style={styles.actionContainer}>
-                <View>
-                    <ThemedText>Registrar Rollos</ThemedText>
-                </View>
-
-                <View>
-                    <TabBarIcon name='pencil' />
-                </View>
+            <View style={{marginTop: 15, display: 'flex', gap: 5}}>
+                <ActionContainer 
+                    href='checkIn/rollRegister'
+                    text='Registrar rollos'
+                    icon='barcode-outline'
+                />
+                <ActionContainer 
+                    href='checkIn/rollRegister'
+                    text='Registrar materia prima'
+                    icon='book-outline'
+                />
             </View>
         </ThemedView>
     )
 }
 
-export const styles = StyleSheet.create({
-    title: {
-        paddingTop: 20
-    }, 
-    actionContainer: {
-        padding: 10, 
-        backgroundColor: '#fff'
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        justifyContent: 'center',
     }
 })
