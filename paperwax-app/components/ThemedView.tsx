@@ -5,13 +5,14 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
   darkColor?: string;
+  header?: boolean
 };
 
-export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
+export function ThemedView({ style, lightColor, darkColor, header = false, ...otherProps }: ThemedViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return (
-    <SafeAreaView style={[{ backgroundColor, flex: 1, paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 }, style]}>
+    <SafeAreaView style={[{ backgroundColor, flex: 1, paddingTop: Platform.OS === "android" && !header ? StatusBar.currentHeight : 0 }, style]}>
       <View style={styles.container} {...otherProps} />
     </SafeAreaView>
   )
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
   },
   container: {
-    padding: 20
+    paddingTop: 25,
+    paddingHorizontal: 10
   }
 });

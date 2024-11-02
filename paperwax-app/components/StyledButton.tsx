@@ -8,7 +8,8 @@ export type StyledButtonProps = {
     onPress: () => Promise<void> | void
     type?: 'primary' | 'secondary' | 'success' | 'danger' | 'info' | 'invisible'
     lightColor?: string
-    darkColor?: string
+    darkColor?: string, 
+    styles?: object
 }
 
 export default function StyledButton({ 
@@ -16,6 +17,7 @@ export default function StyledButton({
     onPress, 
     lightColor,
     darkColor,
+    styles,
     type = 'primary'
 } : StyledButtonProps) {
     const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
@@ -23,26 +25,26 @@ export default function StyledButton({
     return (
         <TouchableOpacity 
             style={[
-                styles.button, 
-                type === 'primary' && styles.primary,
-                type === 'secondary' && styles.secondary,
-                type === 'invisible' && styles.invisible
+                stylesInt.button, 
+                type === 'primary' && stylesInt.primary,
+                type === 'secondary' && stylesInt.secondary,
+                type === 'invisible' && stylesInt.invisible, 
+                styles
             ]} 
             onPress={onPress}
         >
-            <Text style={styles.buttonText}>{title}</Text>
+            <Text style={stylesInt.buttonText}>{title}</Text>
         </TouchableOpacity>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesInt = StyleSheet.create({
     button: {
       backgroundColor: Colors.primary.background, 
       paddingVertical: 12,      
       paddingHorizontal: 20,     
       borderRadius: 10,
-      alignItems: 'center',
-      marginVertical: 10, 
+      alignItems: 'center'
     },
     buttonText: {
       color: '#fff', 

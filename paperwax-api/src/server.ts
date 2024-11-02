@@ -6,6 +6,7 @@ import productRoutes from './routes/ProductRoutes'
 import paperRoutes from './routes/PaperRoutes'
 import rawMaterialRoutes from './routes/RawMaterialRoutes'
 import rollMaterialRoutes from './routes/RollMaterialRoutes'
+import authRoutes from './routes/AuthRouter'
 import { corsOptions } from './config/cors'
 
 dotenv.config()
@@ -22,5 +23,6 @@ app.use('/api/products', productRoutes)
 app.use('/api/papers', paperRoutes)
 app.use('/api/raw-material', rawMaterialRoutes)
 app.use('/api/roll-material', rollMaterialRoutes)
+app.use('/api/auth', authRoutes)
 
 export default app

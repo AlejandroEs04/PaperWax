@@ -1,24 +1,48 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs, useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import TabBar from '@/components/TabBar';
+import * as SecureStore from 'expo-secure-store';
 
 export default function TabLayout() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const router = useRouter();
   const colorScheme = useColorScheme();
+
+  const checkAuthToken = async () => {
+    const token = await SecureStore.getItemAsync('authToken');
+    setIsAuthenticated(!!token);
+  };
+
+  useEffect(() => {
+    checkAuthToken()
+  }, [])
+
+  useEffect(() => {
+    if(isAuthenticated === false) {
+      router.replace("/auth/login")
+    }
+  }, [isAuthenticated])
+
+  if (isAuthenticated === null) {
+    return null
+  }
 
   return (
     <Tabs
+      tabBar={props=> <TabBar {...props} />}
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}
     >
       <Tabs.Screen
-        name="login"
+        name="account"
         options={{
-          title: 'Iniciar Sesion',
+          title: 'Cuenta',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person-circle' : 'person-circle-outline'} color={Colors.primary.background} />
           ),
@@ -27,16 +51,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Inicio',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={Colors.primary.background} />
-          ),
+          ), 
+          headerShown: false, 
         }}
       />
       <Tabs.Screen
-        name="checkIn"
+        name="settings"
         options={{
-          title: 'Registrar',
+          title: 'Configuracion',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'book' : 'book-outline'} color={Colors.primary.background} />
           ),

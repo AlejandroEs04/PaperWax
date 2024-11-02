@@ -55,7 +55,8 @@ enum Units {
 
 model User {
   id Int @id @default(autoincrement())
-  userName String 
+  fullName String?
+  userName String? 
   password String 
   role Role @default(DEVICE)
   quality_controls QualityControl[]

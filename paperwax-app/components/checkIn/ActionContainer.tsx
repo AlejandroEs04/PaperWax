@@ -22,7 +22,7 @@ export default function ActionContainer({ href, text, icon, lightColor, darkColo
 
     return (
         <TouchableOpacity style={[styles.container, { backgroundColor }]}    onPress={() => router.push(href)}>
-            <ThemedText type='subtitle' >{text}</ThemedText>
+            <ThemedText type='link' >{text}</ThemedText>
 
             <Ionicons size={35} style={[{  }]} name={icon} color={iconColor} />
         </TouchableOpacity>
