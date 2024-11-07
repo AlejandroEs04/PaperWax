@@ -33,7 +33,8 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="checkIn/rollRegister" options={{ headerShown: false }} />
+          <Stack.Screen name="checkIn/rollRegister" options={{ headerShown: true, title: "Registrar rollo" }} />
+          <Stack.Screen name="checkIn/rawMaterialRegister" options={{ headerShown: true, title: "Registrar material" }} />
           <Stack.Screen name="auth/login" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>

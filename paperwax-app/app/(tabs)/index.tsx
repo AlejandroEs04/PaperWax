@@ -20,7 +20,7 @@ export default function HomeScreen() {
         />
 
         <ActionContainer 
-          href='checkIn/rollRegister'
+          href='checkIn/rawMaterialRegister'
           text='Registrar materia prima'
           icon='book-outline'
         />

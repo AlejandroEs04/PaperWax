@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Image } from 'react-native'
+import * as SecureStore from 'expo-secure-store'
 
 export default function login() {
     const [id, setId] = useState<string | number>('')
@@ -18,10 +19,11 @@ export default function login() {
     const { mutate } = useMutation({
         mutationFn: authenticateUser, 
         onError: (error) => {
-
+            setError(error.message)
         }, 
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: async(data) => {
+            await SecureStore.setItemAsync('authToken', data)
+            router.replace('/(tabs)')
         }
     })
 
@@ -45,6 +47,12 @@ export default function login() {
             <ThemedText type='title' style={{textAlign: 'center'}}>Bienvenido</ThemedText>
             <Text style={styles.text}>Por favor ingrese sus claves para iniciar sesión en el dispositivo</Text>
 
+            {error && (
+                <View style={styles.errorContainer}>
+                    <Text style={styles.error}>{error}</Text>
+                </View>
+            )}
+
             <ThemedText style={styles.label}>Identificador</ThemedText>
             <TextInput
                 style={styles.input}
@@ -63,7 +71,7 @@ export default function login() {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            {error ? <Text style={styles.error}>{error}</Text> : null}
+            
             <StyledButton 
                 styles={{ marginVertical: 10 }}
                 title="Iniciar Sesión" 
@@ -101,9 +109,19 @@ const styles = StyleSheet.create({
       marginBottom: 15,
       paddingHorizontal: 8,
     },
+    errorContainer: {
+        textAlign: 'center', 
+        width: '100%', 
+        backgroundColor: '#dc2626', 
+        padding: 10, 
+        borderRadius: 20, 
+        marginBottom: 15
+    },
     error: {
-      color: 'red',
-      marginBottom: 12,
+        color: '#fff',
+        fontWeight: 'bold', 
+        fontSize: 18, 
+        textAlign: 'center'
     },
     button: {
         backgroundColor: '#525252', 
