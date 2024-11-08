@@ -6,6 +6,7 @@ import productRoutes from './routes/ProductRoutes'
 import paperRoutes from './routes/PaperRoutes'
 import rawMaterialRoutes from './routes/RawMaterialRoutes'
 import rollMaterialRoutes from './routes/RollMaterialRoutes'
+import processRoutes from './routes/ProcessRoutes'
 import authRoutes from './routes/AuthRouter'
 import { corsOptions } from './config/cors'
 
@@ -24,5 +25,6 @@ app.use('/api/papers', paperRoutes)
 app.use('/api/raw-material', rawMaterialRoutes)
 app.use('/api/roll-material', rollMaterialRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/process', processRoutes)
 
 export default app

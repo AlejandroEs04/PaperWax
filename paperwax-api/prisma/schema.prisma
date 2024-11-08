@@ -42,6 +42,7 @@ model RawMaterial {
   type_id Int 
   stock Int 
   unit Units
+  amount Int?
   processes Process[]
   rolls RollMaterial[]
   materialUsage MaterialUsage[]

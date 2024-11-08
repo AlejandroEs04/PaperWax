@@ -1,6 +1,15 @@
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getProcess } from '../api/ProcessApi'
+import Loader from '../components/Loader'
 
 export default function Index() {
+    const { data, isLoading } = useQuery({
+        queryKey: ['process'], 
+        queryFn: getProcess
+    })
+
+    if(isLoading) return <Loader />
+
     return (
         <>
             <h1 className='text-3xl font-semibold'>Dashboard</h1>
