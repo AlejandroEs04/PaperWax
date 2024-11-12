@@ -14,6 +14,7 @@ export class RawMaterialController {
             })
             res.send('Material registrado correctamente')
         } catch (error) {
+            console.log(error)
             res.status(500).send('Hubo un error registrando el material')
             return
         }
@@ -21,11 +22,26 @@ export class RawMaterialController {
     
     static getAllRawMaterial = async(req: Request, res: Response) => {
         try {
-            const rawMaterials = await prisma.rawMaterial.findMany()
+            const rawMaterials = await prisma.rawMaterial.findMany({
+                include: {
+                    type: true
+                }
+            })
             res.json(rawMaterials)
         } catch (error) {
             res.status(500).send('Hubo un error obteniendo los materiales')
             return
         }
     }
+
+    static getAllRawMaterialType = async(req: Request, res: Response) => {
+        try {
+            const rawMaterialTypes = await prisma.rawMaterialType.findMany()
+            res.json(rawMaterialTypes)
+        } catch (error) {
+            res.status(500).send('Hubo un error obteniendo los tipos')
+            return
+        }
+    }
+
 }

@@ -49,8 +49,8 @@ export default function rollRegister() {
     }
 
     return (
-        <ThemedView>
-            <ThemedText style={{marginTop: 20}} type='title'>Registrar un rollo</ThemedText>
+        <ThemedView header>
+            <ThemedText style={{marginTop: 0}} type='title'>Registrar un rollo</ThemedText>
             <ThemedText>Ingrese la información que se solicita para registrar la entrada de los rollos</ThemedText>
 
             {showCamera && (

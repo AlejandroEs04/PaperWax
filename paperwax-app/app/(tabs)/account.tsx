@@ -1,12 +1,40 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
+import StyledButton from '@/components/StyledButton'
+import * as SecureStore from 'expo-secure-store'
+import { useRouter } from 'expo-router'
 
 export default function account() {
+    const router = useRouter()
+
+    const handleLogOut = async() => {
+        await SecureStore.deleteItemAsync('authToken')
+        router.replace('/auth/login')
+    }
+
     return (
         <ThemedView>
-            <ThemedText>account</ThemedText>
+            <ThemedText type='title'>Cuenta</ThemedText>
+
+            <View style={styles.closeSessionContainer}>
+                <StyledButton 
+                    title='Cerrar Sesión'
+                    onPress={handleLogOut}
+                    type='danger'
+                />
+            </View>
         </ThemedView>
     )
 }
+
+const styles = StyleSheet.create({
+    closeSessionContainer: {
+        flex: 1,
+        position: 'absolute', 
+        bottom: 0, 
+        marginHorizontal: 8, 
+        width: '100%'
+    }
+})

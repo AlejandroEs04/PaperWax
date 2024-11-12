@@ -29,6 +29,7 @@ export default function StyledButton({
                 type === 'primary' && stylesInt.primary,
                 type === 'secondary' && stylesInt.secondary,
                 type === 'invisible' && stylesInt.invisible, 
+                type === 'danger' && stylesInt.danger, 
                 styles
             ]} 
             onPress={onPress}
@@ -60,5 +61,8 @@ const stylesInt = StyleSheet.create({
     invisible: {
         backgroundColor: 'transparent',
         paddingVertical: 5, 
+    },
+    danger: {
+        backgroundColor: '#dc2626'
     }
   });

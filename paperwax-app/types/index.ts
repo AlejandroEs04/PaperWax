@@ -4,7 +4,7 @@ export type Paper = {
 }
 
 export type User = {
-    id?: number 
+    id?: number | string 
     userName?: string 
     password: string
 }
