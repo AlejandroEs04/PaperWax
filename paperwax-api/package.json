@@ -4,7 +4,8 @@
   "description": "API for paper-wax system in typescript",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts", 
+    "build": "npx tsc"
   },
   "author": "Alejandro Raphael Estrada Lopez",
   "license": "ISC",
