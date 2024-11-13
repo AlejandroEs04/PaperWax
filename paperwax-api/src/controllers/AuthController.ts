@@ -36,7 +36,7 @@ export class AuthController {
 
             if(id) {
                 dbUser = await prisma.user.findFirst({
-                    where: { id }
+                    where: { id: +id }
                 })
             } else if(userName) {
                 dbUser = await prisma.user.findFirst({

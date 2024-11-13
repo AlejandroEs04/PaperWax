@@ -32,21 +32,6 @@ export const rollMaterialSchema = z.object({
 
 export type RollMaterial = z.infer<typeof rollMaterialSchema>
 
-export const processSchema = z.object({
-    id: z.number(),
-    type: z.enum(['PRINTING', 'PARAFFIN', 'CUT', 'PACKAGING']), 
-    start_time: z.string(), 
-    end_time: z.string(), 
-    raw_material_id: z.number(), 
-    initial_weight: z.number(), 
-    final_weight: z.number(), 
-    finished_product_id: z.number(), 
-    finished_product_quantity: z.number(), 
-    product_id: z.number()
-})
-
-export type ProcessType = z.infer<typeof processSchema>
-
 export const productSchema = z.object({
     id: z.number(), 
     name: z.string(), 
@@ -56,4 +41,24 @@ export const productSchema = z.object({
 })
 
 export type ProductType = z.infer<typeof productSchema>
+
+export const processSchema = z.object({
+    id: z.number(),
+    type: z.enum(['PRINTING', 'PARAFFIN', 'CUT', 'PACKAGING']), 
+    start_time: z.string(), 
+    end_time: z.string(), 
+    roll_material_id: z.number(), 
+    initial_weight: z.number(), 
+    final_weight: z.number(), 
+    finished_product_id: z.number(), 
+    finished_quantity: z.number(), 
+    product_id: z.number(), 
+    product: productSchema, 
+    roll_material: rollMaterialSchema
+})
+
+export type ProcessType = z.infer<typeof processSchema>
+export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id'>
+
+
 

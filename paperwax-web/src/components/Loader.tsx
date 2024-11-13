@@ -1,6 +1,6 @@
 export default function Loader() {
     return (
-        <div className="flex justify-between items-center w-full">
+        <div className="flex w-full justify-center my-5">
             <span className="loader"></span>
         </div>
     )

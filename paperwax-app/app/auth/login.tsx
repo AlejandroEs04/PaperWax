@@ -29,7 +29,7 @@ export default function login() {
 
     const handleLogin = () => {
         const formData : UserLogin = {
-            id, password
+            id: +id, password
         }
 
         mutate(formData)
