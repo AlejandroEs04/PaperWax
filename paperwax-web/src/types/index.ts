@@ -41,6 +41,7 @@ export const productSchema = z.object({
 })
 
 export type ProductType = z.infer<typeof productSchema>
+export type ProductCreate = Pick<ProductType, 'name' | 'description' | 'paper_id' | 'quantity'>
 
 export const processSchema = z.object({
     id: z.number(),
@@ -60,5 +61,10 @@ export const processSchema = z.object({
 export type ProcessType = z.infer<typeof processSchema>
 export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id'>
 
+export const paperSchema = z.object({
+    id: z.number(), 
+    name: z.string()
+})
 
+export type PaperType = z.infer<typeof paperSchema>
 

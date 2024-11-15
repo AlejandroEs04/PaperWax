@@ -13,7 +13,7 @@ export function ThemedView({ style, lightColor, darkColor, header = false, ...ot
 
   return (
     <SafeAreaView style={[{ backgroundColor, flex: 1, paddingTop: Platform.OS === "android" && !header ? StatusBar.currentHeight : 0 }, style]}>
-      <View style={styles.container} {...otherProps} />
+      <View style={[styles.container, header && styles.paddingContainer]} {...otherProps} />
     </SafeAreaView>
   )
 }
@@ -25,8 +25,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 25,
-    paddingHorizontal: 10, 
+    paddingTop: 0,
+    paddingHorizontal: 15, 
     marginBottom: 85
+  }, 
+  paddingContainer: {
+    paddingTop: 25,
   }
 });

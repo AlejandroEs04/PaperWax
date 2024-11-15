@@ -97,6 +97,7 @@ model RollMaterial {
   processes Process[]
   material RawMaterial @relation(fields: [material_id], references: [id])
   paper Paper @relation(fields: [paper_id], references: [id])
+  @@unique([lot, lot_id])
 }
 
 enum RollMaterialStatus {
@@ -140,4 +141,16 @@ enum ProcessName {
   PARAFFIN 
   CUT 
   PACKAGING
+}
+
+model Sale {
+  id Int @id @default(autoincrement())
+  date DateTime 
+  status SaleStatus
+}
+
+enum SaleStatus {
+  CREATED
+  IN_PROGRES
+  COMPLETED
 }

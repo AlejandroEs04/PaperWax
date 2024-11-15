@@ -32,7 +32,6 @@ export default function RawMaterialForm({ register, errors } : RawMaterialFormPr
                 {errors.name && (
                     <p className='text-red-500 text-start mt-2 rounded'>{errors.name.message}</p>
                 )}
-
             </div>
         
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-4">
@@ -44,7 +43,8 @@ export default function RawMaterialForm({ register, errors } : RawMaterialFormPr
                         id="stock"
                         placeholder="Stock actual"
                         {...register("stock", {
-                            valueAsNumber: true
+                            valueAsNumber: true, 
+                            
                         })}
                     />
                 </div>

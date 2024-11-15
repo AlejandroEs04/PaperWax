@@ -31,19 +31,25 @@ export default function HomeScreen() {
 
       <View style={{marginTop: 15, display: 'flex', gap: 5}}>
         <ActionContainer 
-          href='checkIn/rollRegister'
+          href='process/followProcess'
           text='Seguir Proceso'
           icon='camera-outline'
         />
 
         <ActionContainer 
-          href='checkIn/rollRegister'
+          href='process/createProcess'
+          text='Iniciar Proceso'
+          icon='add-outline'
+        />
+
+        <ActionContainer 
+          href='process/createPrinting'
           text='Imprenta'
           icon='print-outline'
         />
 
         <ActionContainer 
-          href='checkIn/rollRegister'
+          href='process/createParaffin'
           text='Parafinado'
           icon='settings-outline'
         />

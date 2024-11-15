@@ -12,6 +12,8 @@ export default function AppLayout() {
                         <Link to={'/materials'} className="font-semibold hover:text-blue-600 transition-colors">Materiales</Link>
                         <Link to={'/products'} className="font-semibold hover:text-blue-600 transition-colors">Productos</Link>
                         <Link to={'/'} className="font-semibold hover:text-blue-600 transition-colors">Procesos</Link>
+                        <Link to={'/sales'} className="font-semibold hover:text-blue-600 transition-colors">Ventas</Link>
+                        <Link to={'/purchases'} className="font-semibold hover:text-blue-600 transition-colors">Compras</Link>
                     </nav>
                 </div>
             </header>

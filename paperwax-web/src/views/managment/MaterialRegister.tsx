@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form"
-import RawMaterialForm from "../../components/MaterialCrud/RawMaterialForm"
-import { RawMaterialCreate } from "../../types"
-import { useMutation } from '@tanstack/react-query'
-import { createMaterial } from "../../api/MaterialApi"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { useMutation } from '@tanstack/react-query'
+import { toast } from "react-toastify"
+import { RawMaterialCreate } from "../../types"
+import { createMaterial } from "../../api/MaterialApi"
+import RawMaterialForm from "../../components/MaterialCrud/RawMaterialForm"
 
 export default function MaterialRegister() {
     const initialValues : RawMaterialCreate = {
@@ -26,7 +26,7 @@ export default function MaterialRegister() {
         }, 
         onSuccess: (data) => {
             toast.success(data)
-            navigate('/inventory')
+            navigate('/')
         }
     })
 

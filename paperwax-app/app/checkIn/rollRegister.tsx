@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { useQuery } from '@tanstack/react-query'
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
+import { useQuery,useMutation } from '@tanstack/react-query'
 import { CameraView, Camera } from 'expo-camera'
 import getPapersPicker from '@/utils/getPapersPicker'
 import { getPaper } from '@/api/PaperApi'
@@ -10,6 +10,8 @@ import { ThemedText } from '@/components/ThemedText'
 import StyledButton from '@/components/StyledButton'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Colors } from '@/constants/Colors'
+import { createRollMaterial } from '@/api/MaterialApi'
+import { RollMaterialCreate } from '@/types'
 
 export default function rollRegister() {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -19,8 +21,6 @@ export default function rollRegister() {
     const [lotId, setLotId] = useState('')
     const [weight, setWeight] = useState('')
     const [paperId, setPaperId] = useState(0)
-
-
     
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         setLot(data.slice(0, 4)) 
@@ -39,7 +39,29 @@ export default function rollRegister() {
         })();
     }, []);
 
-    if(isLoading) return (<Text>Cargando</Text>)
+    const { mutate } = useMutation({
+        mutationFn: createRollMaterial, 
+        onError: (error) => {
+            Alert.alert('Hubo un error', 'Hubo un error al tratar de registrar el rollo', [
+                {text: 'Aceptar', style: 'cancel'}
+            ])
+        }, 
+        onSuccess: (data) => {
+            Alert.alert('Rollo registrado con exito', data, [
+                {text: 'Aceptar', style: 'default'}
+            ])
+        }
+    })
+
+    const handleForm = () => mutate({
+        lot: lot, lot_id: +lotId, paper_id: +paperId, weight: +weight, material_id: 2
+    })
+
+    if(isLoading) return (
+        <View style={{marginTop: 40}}>
+            <ActivityIndicator size="large" />
+        </View>
+    )
 
     if (hasPermission === null) {
         return <ThemedText style={{marginTop: 50}}>Requesting for camera permission</ThemedText>
@@ -90,6 +112,7 @@ export default function rollRegister() {
             </View>
         
             <View style={styles.form}>
+                <ThemedText>Lote</ThemedText>
                 <TextInput
                     style={styles.input}
                     placeholder="Lote"
@@ -97,6 +120,7 @@ export default function rollRegister() {
                     onChangeText={setLot}
                     autoCapitalize="none"
                 />
+                <ThemedText>ID del lote</ThemedText>
                 <TextInput
                     keyboardType='numeric'
                     style={styles.input}
@@ -105,6 +129,7 @@ export default function rollRegister() {
                     onChangeText={setLotId}
                     autoCapitalize="none"
                 />
+                <ThemedText>Peso del rollo</ThemedText>
                 <TextInput
                     keyboardType='numeric'
                     style={styles.input}
@@ -113,17 +138,20 @@ export default function rollRegister() {
                     onChangeText={setWeight}
                     autoCapitalize="none"
                 />
+                <ThemedText>Tipo de papel</ThemedText>
+                {papers && (
+                    <RNPickerSelect
+                        onValueChange={(value) => setPaperId(value)}
+                        items={getPapersPicker(papers)}
+                        style={pickerSelectStyles}
+                    />
+                )}
 
-                <RNPickerSelect
-                    onValueChange={(value) => setPaperId(value)}
-                    items={getPapersPicker(papers)}
-                    style={pickerSelectStyles}
-                />
 
                 <StyledButton 
                     title='Registrar Rollo'
                     styles={{marginTop: 10}}
-                    onPress={() => console.log('hola')}
+                    onPress={handleForm}
                 />
             </View>
         </ThemedView>
@@ -135,7 +163,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     input: {
-        height: 42,
+        height: 'auto',
         borderRadius: 0,
         backgroundColor: '#fff',
         fontSize: 18,
@@ -163,7 +191,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingHorizontal: 8,
     },
     inputAndroid: {
-        height: 40,
+        height: 'auto',
         borderRadius: 4,
         backgroundColor: '#fff',
         fontSize: 18,

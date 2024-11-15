@@ -33,8 +33,12 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="checkIn/rollRegister" options={{ headerShown: true, title: "Registrar rollo" }} />
-          <Stack.Screen name="checkIn/rawMaterialRegister" options={{ headerShown: true, title: "Registrar material" }} />
+          <Stack.Screen name="checkIn/rollRegister" options={{ headerShown: true, title: "Registrar Rollo" }} />
+          <Stack.Screen name="checkIn/rawMaterialRegister" options={{ headerShown: true, title: "Registrar Material" }} />
+          <Stack.Screen name="process/followProcess" options={{ headerShown: true, title: "Seguir Proceso" }} />
+          <Stack.Screen name="process/createProcess" options={{ headerShown: true, title: "Crear Proceso" }} />
+          <Stack.Screen name="process/createPrinting" options={{ headerShown: true, title: "Iniciar Imprenta" }} />
+          <Stack.Screen name="process/createParaffin" options={{ headerShown: true, title: "Iniciar Imprenta" }} />
           <Stack.Screen name="auth/login" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>

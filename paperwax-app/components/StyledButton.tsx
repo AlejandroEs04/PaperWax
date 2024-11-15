@@ -2,6 +2,7 @@ import { Colors } from '@/constants/Colors'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import React from 'react'
 import { Text, TouchableOpacity, StyleSheet, TextProps } from 'react-native'
+import { ThemedText } from './ThemedText'
 
 export type StyledButtonProps = {
     title: string
@@ -34,7 +35,11 @@ export default function StyledButton({
             ]} 
             onPress={onPress}
         >
-            <Text style={stylesInt.buttonText}>{title}</Text>
+            {type === 'invisible' ? (
+                <ThemedText style={{ fontSize: 22, fontWeight: '800' }}>{title}</ThemedText>
+            ) : (
+                <Text style={stylesInt.buttonText}>{title}</Text>
+            )}
         </TouchableOpacity>
     )
 }
