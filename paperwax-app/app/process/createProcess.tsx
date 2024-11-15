@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, Vibration } from 'react-native'
 import { CameraView, Camera } from 'expo-camera'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { ThemedView } from '@/components/ThemedView'
@@ -8,9 +8,9 @@ import RNPickerSelect from 'react-native-picker-select'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Colors } from '@/constants/Colors'
 import StyledButton from '@/components/StyledButton'
-import { createRollMaterial, getRolls } from '@/api/MaterialApi'
-import { createProduct, getProducts } from '@/api/ProductApi'
-import { ProcessCreate, ProductType, RollMaterial, RollMaterialCreate } from '@/types'
+import { getRolls } from '@/api/MaterialApi'
+import { getProducts } from '@/api/ProductApi'
+import { ProcessCreate, ProductType, RollMaterial } from '@/types'
 import getPapersPicker, { getRollPicker } from '@/utils/getPapersPicker'
 import { registerProcess } from '@/api/ProcessApi'
 
@@ -46,6 +46,8 @@ export default function createProcess() {
             ])
         }, 
         onSuccess: (data) => {
+            Vibration.vibrate()
+
             Alert.alert('Proceso registrado con exito', data, [
                 {text: 'Aceptar', style: 'default'}
             ])
@@ -73,6 +75,7 @@ export default function createProcess() {
     useEffect(() => {
         const roll = rollMaterials.filter(roll => roll.lot === lot && roll.lot_id === +lotId && roll.status === 'AVAIBLE')
         if(roll.length) {
+            Vibration.vibrate()
             setRollMaterialId(roll[0].id)
         } else if(roll.length === 0 && lot && lotId) {
             Alert.alert('Rollo no disponible', 'El rollo ya fue usado o no esta disponible', [

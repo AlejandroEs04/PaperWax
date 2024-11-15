@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Alert, Vibration } from 'react-native'
 import { useQuery,useMutation } from '@tanstack/react-query'
 import { CameraView, Camera } from 'expo-camera'
 import getPapersPicker from '@/utils/getPapersPicker'
@@ -25,6 +25,8 @@ export default function rollRegister() {
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         setLot(data.slice(0, 4)) 
         setLotId(data.slice(4)) 
+        
+        if(!lot && !lotId) Vibration.vibrate()
     };
     
     const { data: papers, isLoading } = useQuery({
@@ -47,6 +49,8 @@ export default function rollRegister() {
             ])
         }, 
         onSuccess: (data) => {
+            Vibration.vibrate()
+
             Alert.alert('Rollo registrado con exito', data, [
                 {text: 'Aceptar', style: 'default'}
             ])

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, Vibration } from 'react-native'
 import { CameraView, Camera } from 'expo-camera'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { ThemedView } from '@/components/ThemedView'
@@ -45,6 +45,8 @@ export default function createPrinting() {
             ])
         }, 
         onSuccess: (data) => {
+            Vibration.vibrate()
+
             Alert.alert('Proceso registrado con exito', data, [
                 {text: 'Aceptar', style: 'default'}
             ])
@@ -72,6 +74,7 @@ export default function createPrinting() {
     useEffect(() => {
         const roll = rollMaterials.filter(roll => roll.lot === lot && roll.lot_id === +lotId && roll.status === 'AVAIBLE')
         if(roll.length) {
+            Vibration.vibrate()
             setRollMaterialId(roll[0].id)
         } else if(roll.length === 0 && lot && lotId) {
             Alert.alert('Rollo no disponible', 'El rollo ya fue usado o no esta disponible', [
