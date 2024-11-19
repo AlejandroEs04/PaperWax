@@ -1,8 +1,12 @@
 import { Request, Response } from "express"
 import { PrismaClient } from "@prisma/client"
 import Process, { ProcessCreate } from "../models/Process"
+import formatDate from "../utils/formatDate"
+import { Type } from "../types"
 
 const prisma = new PrismaClient()
+
+const isValidType = (type: string): type is Type => { return type.includes(type as Type) }
 
 export class ProcessController {
     static createProcess = async(req: Request, res: Response) => {
@@ -85,6 +89,71 @@ export class ProcessController {
         } catch (error) {
             res.status(500).send('Hubo un error obteniendo los procesos')
             return
+        }
+    }
+
+    static getPrintProcess = async(req: Request, res: Response) => {
+        const { date, type } = req.params
+
+        try {
+            if(!isValidType(type)) {
+                res.status(401).send('El tipo no es el correcto')
+                return
+            }
+
+            const data = await prisma.process.findMany({
+                where: {
+                    end_time: {
+                        lte: new Date(`${date}-31`), 
+                        gte: new Date(`${date}-01`), 
+                    }, 
+                    type
+                }, 
+                include: {
+                    product: {
+                        include: {
+                            paper: true
+                        }
+                    }, 
+                    roll_material: true
+                }
+            })
+
+            if(data.length === 0) {
+                res.status(401).send('No hay procesos del tipo que se solicito')
+                return
+            }
+
+            let newData
+
+            if(type === 'PRINTING') {
+                newData = data.map(item => {
+                    return {
+                        Día: item.end_time, 
+                        Product: item.product.name, 
+                        Papel: item.product.paper.name, 
+                        PesoInicial: item.initial_weight, 
+                        PesoFinal: item.final_weight, 
+                        Total: item.finished_quantity
+                    }
+                })
+            } else if (type === 'PARAFFIN') {
+                newData = data.map(item => {
+                    return {
+                        Día: item.end_time, 
+                        Product: item.product.name, 
+                        Papel: item.product.paper.name, 
+                        PesoInicial: item.initial_weight, 
+                        PesoFinal: item.final_weight, 
+                        Total: item.finished_quantity
+                    }
+                })
+            }
+
+            res.json(newData)
+        } catch (error) {
+            console.log("Hubo un error")
+            console.log(error)
         }
     }
 }

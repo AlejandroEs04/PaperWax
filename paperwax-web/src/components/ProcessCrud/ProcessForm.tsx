@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { UseFormRegister, FieldErrors } from "react-hook-form"
-import { ProcessCreate, RawMaterialCreate } from "../../types"
+import { ProcessCreate } from "../../types"
 import { getRolls } from '../../api/MaterialApi'
 import { getProducts } from '../../api/ProductApi'
 import Loader from '../Loader'

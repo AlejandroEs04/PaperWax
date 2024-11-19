@@ -19,7 +19,10 @@ model Product {
   description String 
   paper_id Int 
   quantity Int 
+  price Decimal @default(0)
   processes Process[]
+  saleProduct SaleProduct[]
+  purchaseProduct PurchaseProduct[]
   paper Paper @relation(fields: [paper_id], references: [id])
 }
 
@@ -33,6 +36,7 @@ model Paper {
 model RawMaterialType {
   id Int @id @default(autoincrement())
   description String
+  price Decimal @default(0)
   raw_materials RawMaterial[]
 }
 
@@ -147,10 +151,54 @@ model Sale {
   id Int @id @default(autoincrement())
   date DateTime 
   status SaleStatus
+  customer_id Int
+  products SaleProduct[]
+  customer Customer @relation(fields: [customer_id], references: [id])
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+  name String
+  sales Sale[]
+}
+
+model SaleProduct {
+  sale_id Int
+  product_id Int 
+  quantity Int
+  price Decimal
+  discount Decimal
+  @@id([sale_id, product_id])
+  sale Sale @relation(fields: [sale_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
 }
 
 enum SaleStatus {
-  CREATED
-  IN_PROGRES
+  ON_HOLD
+  IN_PROGRESS
   COMPLETED
+  DELIVERED
+}
+
+model Purchase {
+  id Int @id @default(autoincrement())
+  date DateTime 
+  status PurchaseStatus
+  products PurchaseProduct[]
+}
+
+model PurchaseProduct {
+  purchase_id Int
+  product_id Int 
+  quantity Int
+  price Decimal
+  discount Decimal
+  @@id([purchase_id, product_id])
+  purchase Purchase @relation(fields: [purchase_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+}
+
+enum PurchaseStatus {
+  CREATED
+  RECEIVED
 }

@@ -24,6 +24,18 @@ export async function getProcessById(id: number) {
     }
 }
 
+export async function getPrintProcess(type: ProcessType['type'], month: string) {
+    try {
+        const { data } = await api(`/process/${type}/${month}`)
+        return data
+    } catch (error) {
+        console.log(error)
+        if(isAxiosError(error) && error.response) {
+            throw new Error(error.response.data)
+        }
+    }
+}
+
 export async function createProcess(process: ProcessCreate) {
     try {
         const { data } = await api.post<string>('/process', process)

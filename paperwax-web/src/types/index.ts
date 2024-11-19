@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import SaleCreate from '../views/managment/SaleCreate'
 
 export const rawMaterialTypeSchema = z.object({
     description: z.string(), 
@@ -36,6 +37,7 @@ export const productSchema = z.object({
     id: z.number(), 
     name: z.string(), 
     description: z.string(), 
+    price: z.number(),
     paper_id: z.number(), 
     quantity: z.number()
 })
@@ -67,4 +69,38 @@ export const paperSchema = z.object({
 })
 
 export type PaperType = z.infer<typeof paperSchema>
+
+export const customerSchema = z.object({
+    id: z.number(), 
+    name: z.string()
+})
+
+export type CustomerType = z.infer<typeof customerSchema>
+
+export const saleSchema = z.object({
+    id: z.number(), 
+    date: z.string(), 
+    status: z.enum(['ON_HOLD', 'IN_PROGRESS', 'COMPLETED', 'DELIVERED']), 
+    customer_id: z.number(), 
+    products: z.array(productSchema), 
+    customer: customerSchema
+})
+
+export const saleProductSchema = z.object({
+    sale_id: z.number(), 
+    product_id: z.number(), 
+    quantity: z.number(), 
+    price: z.number(), 
+    discount: z.number()
+})
+
+export type SaleProductType = z.infer<typeof saleProductSchema>
+
+export type SaleType = z.infer<typeof saleSchema>
+export type SaleCreate = Pick<SaleType, 'date' | 'status' | 'customer_id' | 'products'>
+
+export type SaleRegister = SaleCreate & {
+    products: Pick<SaleProductType, 'discount' | 'price' | 'product_id' | 'quantity'>[]
+}
+
 
