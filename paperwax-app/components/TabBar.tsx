@@ -12,7 +12,7 @@ const TabBar = ({ state, descriptors, navigation, lightColor, darkColor }) => {
     const icons = {
         Cuenta: {outline: 'person-circle', normal: 'person-circle-outline'}, 
         Inicio: {outline: 'home', normal: 'home-outline'}, 
-        Configuracion: {outline: 'settings', normal: 'settings-outline'}, 
+        Registros: {outline: 'book', normal: 'book-outline'}, 
     }
 
     return (

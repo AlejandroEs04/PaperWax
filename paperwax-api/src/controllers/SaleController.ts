@@ -55,4 +55,32 @@ export class SaleController {
             return
         }
     }
+
+    static getSaleProducts = async(req: Request, res: Response) => {
+        try {
+            const products = await prisma.saleProduct.findMany({
+                include: {
+                    product: {
+                        include: {
+                            paper: true
+                        }
+                    }, 
+                    sale: true
+                }
+            })
+
+            res.json(products)
+        } catch (error) {
+            res.status(500).send('Hubo un error obteniendo las ventas')
+            return
+        }
+    } 
+
+    static saleProcess = async(req: Request, res: Response) => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
 }

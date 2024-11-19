@@ -60,12 +60,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="managment"
         options={{
-          title: 'Configuracion',
+          title: 'Registros',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'book' : 'book-outline'} color={Colors.primary.background} />
-          ),
+            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={Colors.primary.background} />
+          ), 
+          headerShown: false, 
         }}
       />
     </Tabs>
