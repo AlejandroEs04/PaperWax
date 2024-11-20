@@ -38,9 +38,7 @@ export class ProcessController {
                     return
                 }
     
-                const processExistsIn = saleProductProccess.filter(process => process.status === process.status)
-
-                console.log(processExistsIn)
+                const processExistsIn = saleProductProccess.filter(item => item.status === process.type)
     
                 if(processExistsIn.length) {
                     res.status(401).send('Este proceso ya no esta disponible')
