@@ -62,8 +62,9 @@ export class SaleController {
                 include: {
                     product: {
                         include: {
-                            paper: true
-                        }
+                            paper: true,
+                            processes: true
+                        }, 
                     }, 
                     sale: true
                 }

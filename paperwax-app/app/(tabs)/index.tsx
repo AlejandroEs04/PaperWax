@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { getPendingProcess } from '@/api/ProcessApi';
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { SaleProductType } from '@/types';
 
 const Status = {
   ON_HOLD: 'En espera', 
@@ -21,10 +22,33 @@ const Status = {
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({ light: Colors.light.container, dark: Colors.dark.container }, 'background');
 
+  const getNextProcess = (currentProcess: SaleProductType['status']) : SaleProductType['status'] => {
+    switch(currentProcess) {
+      case 'ON_HOLD': 
+        return 'PRINTING'
+
+      case 'PRINTING':
+        return 'PARAFFIN'
+
+      case 'PARAFFIN':
+        return 'CUT'
+
+      case 'CUT':
+        return 'PACKAGING'
+
+      case 'PACKAGING':
+        return 'COMPLETED'
+    }
+    
+    return 'ON_HOLD'
+  }
+
   const { data, isLoading } = useQuery({
     queryKey: ['pendingProcess'], 
     queryFn: getPendingProcess
   })
+
+  console.log(data)
 
   if(isLoading) return <ActivityIndicator />
 
@@ -44,7 +68,7 @@ export default function HomeScreen() {
       <View style={{gap: 10}}>
         {data?.length ? data.map(item => (
           <TouchableOpacity
-            onPress={() => router.push(`/process/createProcess?sale_id=${item.sale_id}&paper=${item.product.paper_id}&product=${item.product.id}&typeUrl=PRINTING`)}
+            onPress={() => router.push(`/process/createProcess?sale_id=${item.sale_id}&paper=${item.product.paper_id}&product=${item.product.id}&typeUrl=${getNextProcess(item.status)}`)}
             key={`${item.sale_id}-${item.product.id}`}
             style={[
               {

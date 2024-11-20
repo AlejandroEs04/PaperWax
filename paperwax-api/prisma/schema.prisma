@@ -120,6 +120,7 @@ model Process {
   final_weight Decimal?
   finished_product_id Int?
   finished_quantity Int?
+  sale_id Int? @default(0)
   product_id Int
   qualityControls QualityControl[]
   materialUsage MaterialUsage[]

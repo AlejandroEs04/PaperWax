@@ -52,7 +52,8 @@ export class ProcessController {
                     start_time: process.start_time, 
                     roll_material_id: +process.roll_material_id, 
                     initial_weight: +process.initial_weight, 
-                    product_id: +process.product_id
+                    product_id: +process.product_id, 
+                    sale_id: req.body.sale_id ? +req.body.sale_id : 0
                 }
             })
 

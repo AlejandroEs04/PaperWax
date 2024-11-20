@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, Vibration } from 'react-native'
 import { CameraView, Camera } from 'expo-camera'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
@@ -14,6 +14,7 @@ import { getProducts } from '@/api/ProductApi'
 import { ProcessCreate, ProductType, RollMaterial } from '@/types'
 import getPapersPicker, { getRollPicker } from '@/utils/getPapersPicker'
 import { registerProcess } from '@/api/ProcessApi'
+import queryClient from '@/lib/queryClient'
 
 export default function createProcess() {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -29,11 +30,12 @@ export default function createProcess() {
     const [lot, setLot] = useState('')
     const [lotId, setLotId] = useState('')
 
-    const { paper, product, typeUrl, sale_id } = useLocalSearchParams<{
+    const { paper, product, typeUrl, sale_id, roll_id } = useLocalSearchParams<{
         sale_id?: string;
         paper?: string;
         product?: string;
         typeUrl?: ProcessCreate['type']
+        roll_id?: string;
     }>();
 
     const { data: rollMaterialsApi, isLoading: rollsIsLoading } = useQuery({
@@ -59,7 +61,11 @@ export default function createProcess() {
             Alert.alert('Proceso registrado con exito', data, [
                 {text: 'Aceptar', style: 'default'}
             ])
-        }
+
+            queryClient.invalidateQueries({queryKey: ['pendingProcess']})
+
+            router.back()
+        }, 
     })
 
     const handleForm = () => mutate({
@@ -114,13 +120,16 @@ export default function createProcess() {
         if(typeUrl) {
             setType(typeUrl)
         }
-    }, [product, paper])
+        if(roll_id) {
+            setRollMaterialId(roll_id)
+        }
+    }, [product, paper, typeUrl, roll_id])
 
     useEffect(() => {
         if(rollMaterialId && paper) {
-            const roll = rollMaterials.filter(roll => roll.id === rollMaterialId)[0]
-    
-            if(+roll.paper_id !== +paper!) {
+            const roll = rollMaterials.filter(roll => roll.id === +rollMaterialId)[0]
+
+            if(+roll?.paper_id !== +paper!) {
                 Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
                     {text: 'Aceptar', style: 'cancel'}
                 ])

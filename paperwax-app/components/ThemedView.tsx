@@ -1,4 +1,4 @@
-import { View, type ViewProps, SafeAreaView, Platform, StatusBar, StyleSheet } from 'react-native';
+import { View, type ViewProps, SafeAreaView, Platform, StatusBar, StyleSheet, ScrollView } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 
@@ -13,7 +13,9 @@ export function ThemedView({ style, lightColor, darkColor, header = false, ...ot
 
   return (
     <SafeAreaView style={[{ backgroundColor, flex: 1, paddingTop: Platform.OS === "android" && !header ? StatusBar.currentHeight : 0 }, style]}>
-      <View style={[styles.container, header && styles.paddingContainer]} {...otherProps} />
+      <ScrollView>
+        <View style={[styles.container, header && styles.paddingContainer]} {...otherProps} />
+      </ScrollView>
     </SafeAreaView>
   )
 }
