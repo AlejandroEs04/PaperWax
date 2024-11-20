@@ -81,4 +81,5 @@ export type SaleProductType = {
     sale_id: number 
     quantity: number
     product: ProductType
+    status: 'ON_HOLD' | 'PRINTING' | 'PARAFFIN' | 'CUT' | 'PACKAGING' | 'COMPLETED' | 'DELIVERED'
 }

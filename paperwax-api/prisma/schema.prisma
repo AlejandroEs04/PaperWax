@@ -168,10 +168,20 @@ model SaleProduct {
   quantity Int
   price Decimal
   discount Decimal
-  status SaleStatus @default(ON_HOLD)
+  status SaleProductStatus @default(ON_HOLD)
   @@id([sale_id, product_id])
   sale Sale @relation(fields: [sale_id], references: [id])
   product Product @relation(fields: [product_id], references: [id])
+}
+
+enum SaleProductStatus {
+  ON_HOLD 
+  PRINTING
+  PARAFFIN
+  CUT
+  PACKAGING 
+  COMPLETED
+  DELIVERED
 }
 
 enum SaleStatus {

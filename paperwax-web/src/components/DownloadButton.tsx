@@ -3,7 +3,7 @@ import { exportToExcel } from '../utils/exportToExcel';
 import { getPrintProcess } from '../api/ProcessApi';
 import { toast } from 'react-toastify';
 import Loader from './Loader';
-import { ProcessType } from '../types';
+import { ProcessType, SaleType } from '../types';
 
 type DownloadButtonProps = {
   onHide: () => void
@@ -33,6 +33,12 @@ export const DownloadButton = ({onHide} : DownloadButtonProps) => {
       }
     };
 
+    const handleTypeChange = (value: string) => {
+      if (['PRINTING', 'PARAFFIN', 'CUT', 'PACKAGING'].includes(value)) {
+        setType(value as ProcessType['type']); // Se asegura de que sea válido
+      }
+    };
+
     if(isLoading) return <Loader />
   
     return (
@@ -40,7 +46,7 @@ export const DownloadButton = ({onHide} : DownloadButtonProps) => {
         <select
           value={type}
           className='p-2 rounded w-full text-sm'
-          onChange={(e) => setType(e.target.value)}
+          onChange={e => handleTypeChange(e.target.value)}
         >
           <option value="PRINTING">Impresión</option>
           <option value="PARAFFIN">Parafinado</option>

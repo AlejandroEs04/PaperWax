@@ -8,6 +8,16 @@ import { getPendingProcess } from '@/api/ProcessApi';
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
+const Status = {
+  ON_HOLD: 'En espera', 
+  PRINTING: 'Impresion', 
+  PARAFFIN: 'Parafinado', 
+  CUT: 'Corte', 
+  PACKAGING: 'Empaquetado', 
+  COMPLETED: 'Completado', 
+  DELIVERED: 'Entregado'
+}
+
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({ light: Colors.light.container, dark: Colors.dark.container }, 'background');
 
@@ -49,9 +59,9 @@ export default function HomeScreen() {
             
             <View style={{width: '40%'}}>
               <ThemedText type='secondary' style={{textAlign: 'right'}}>Cantidad: {item.quantity}</ThemedText>
+              <ThemedText type='secondary' style={{textAlign: 'right'}}>Status: {Status[item.status]}</ThemedText>
             </View>
           </View>
-          
         </TouchableOpacity>
       )) : (
         <ThemedText>No hay productos</ThemedText>
