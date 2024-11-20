@@ -89,7 +89,7 @@ export default function createProcess() {
     })
 
     const handleForm = () => {
-        if(typeUrl !== 'ON_HOLD' && typeUrl) {
+        if(typeUrl !== 'PRINTING' && typeUrl) {
             finishedProcess({
                 data: {
                     ...processApi?.filter(item => +item.id === +process_id!)[0]!, 
@@ -122,7 +122,6 @@ export default function createProcess() {
     const checkRoll = (id: number) => {
         if(id && paper) {
             const roll = rollMaterials.filter(roll => roll.id === id)[0]
-            console.log(roll)
             if(+roll.paper_id !== +paper!) {
                 Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
                     {text: 'Aceptar', style: 'cancel'}
@@ -157,25 +156,6 @@ export default function createProcess() {
             setRollMaterialId(roll_id)
         }
     }, [product, paper, typeUrl, roll_id])
-
-    useEffect(() => {
-        if((rollMaterialId !== 0 || rollMaterialId !== undefined) && paper !== undefined) {
-            //ALAVERGA TODO
-            console.log((rollMaterialId !== 0 || rollMaterialId !== undefined))
-            const roll = rollMaterials.filter(roll => roll.id === +rollMaterialId)[0]
-
-            if(+roll?.paper_id !== +paper!) {
-                Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
-                    {text: 'Aceptar', style: 'cancel'}
-                ])
-
-                setRollMaterialId(0)
-                return
-            }
-
-            setInitialWeight(roll.weight.toString())
-        }
-    }, [rollMaterialId])
 
     useEffect(() => {
         (async () => {

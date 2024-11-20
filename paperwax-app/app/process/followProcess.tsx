@@ -17,10 +17,13 @@ type ProcessListType = ProcessType & {
 }
 
 const Status = {
+    ON_HOLD: 'ON_HOLD',
     PRINTING: 'Impresion', 
     PARAFFIN: 'Parafinado', 
     CUT: 'Corte', 
-    PACKAGING: 'Empaquetado'
+    PACKAGING: 'Empaquetado', 
+    COMPLETED: 'Completado', 
+    DELIVERED: 'Entregado'
   }
 
 export default function followProcess() {
@@ -126,7 +129,6 @@ export default function followProcess() {
                                 <View style={{width: '60%'}}>
                                     <ThemedText type='secondary'>Nombre: {process.product?.name}</ThemedText>
                                     <ThemedText type='secondary' style={{marginTop: 5}}>Rollo: {process.roll_material.lot + "" + process.roll_material.lot_id}</ThemedText>
-                                    <ThemedText type='secondary' style={{marginTop: 5}}>Papel: {process.product.paper?.name}</ThemedText>
                                 </View>
                                 
                                 <View style={{width: '40%'}}>

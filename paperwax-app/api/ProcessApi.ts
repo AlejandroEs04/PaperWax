@@ -42,9 +42,10 @@ export async function finishProcess(formData: { data: ProcessType, processId: nu
         const { data } = await api.put<string>(`/process/finish/${formData.processId}`, formData.data)
         return data
     } catch (error) {
+        console.log("Hola")
         if(isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.error)
-        }  
+            throw new Error(error.response.data)
+        }
         throw new Error('Unexpected error'); 
     }
 }

@@ -17,6 +17,7 @@ export default function account() {
     return (
         <ThemedView>
             <ThemedText type='title'>Cuenta</ThemedText>
+            <ThemedText type='subtitle' style={{fontWeight: 500, marginVertical: 10}}>Tipo: Dispositivo</ThemedText>
 
             <View style={styles.closeSessionContainer}>
                 <StyledButton 
@@ -32,7 +33,6 @@ export default function account() {
 const styles = StyleSheet.create({
     closeSessionContainer: {
         flex: 1,
-        position: 'absolute', 
         bottom: 0, 
         marginHorizontal: 8, 
         width: '100%'
