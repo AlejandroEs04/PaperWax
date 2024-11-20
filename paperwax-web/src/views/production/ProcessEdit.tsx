@@ -14,7 +14,7 @@ export default function ProcessEdit() {
     const params = useParams()
     const navigate = useNavigate()
     const processId = params.id!
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['editProcess', processId],
         queryFn: () => getProcessById(+processId)
     })
