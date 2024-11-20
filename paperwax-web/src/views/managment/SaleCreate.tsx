@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useMutation } from '@tanstack/react-query'
+import queryClient from "../../lib/queryClient"
 import { toast } from "react-toastify"
 import { ProductType, SaleRegister } from "../../types"
 import { formInputDate } from "../../utils/formatDate"
@@ -35,6 +36,7 @@ export default function SaleCreate() {
         onSuccess: (data) => {
             toast.success(data)
             navigate('/sales')
+            queryClient.invalidateQueries({queryKey: ['pendingProcess']})
         }
     })
 

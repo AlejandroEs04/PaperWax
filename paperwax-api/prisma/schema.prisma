@@ -14,42 +14,42 @@ datasource db {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-  name String 
-  description String 
-  paper_id Int 
-  quantity Int 
-  price Decimal @default(0)
-  processes Process[]
-  saleProduct SaleProduct[]
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  paper_id        Int
+  quantity        Int
+  price           Decimal           @default(0)
+  processes       Process[]
+  saleProduct     SaleProduct[]
   purchaseProduct PurchaseProduct[]
-  paper Paper @relation(fields: [paper_id], references: [id])
+  paper           Paper             @relation(fields: [paper_id], references: [id])
 }
 
 model Paper {
-  id Int @id @default(autoincrement())
-  name String
+  id       Int            @id @default(autoincrement())
+  name     String
   products Product[]
-  rolls RollMaterial[]
+  rolls    RollMaterial[]
 }
 
 model RawMaterialType {
-  id Int @id @default(autoincrement())
-  description String
-  price Decimal @default(0)
+  id            Int           @id @default(autoincrement())
+  description   String
+  price         Decimal       @default(0)
   raw_materials RawMaterial[]
 }
 
 model RawMaterial {
-  id Int @id @default(autoincrement())
-  name String 
-  type_id Int 
-  stock Int 
-  unit Units
-  amount Int?
-  rolls RollMaterial[]
+  id            Int             @id @default(autoincrement())
+  name          String
+  type_id       Int
+  stock         Int
+  unit          Units
+  amount        Int?
+  rolls         RollMaterial[]
   materialUsage MaterialUsage[]
-  type RawMaterialType @relation(fields: [type_id], references: [id])
+  type          RawMaterialType @relation(fields: [type_id], references: [id])
 }
 
 enum Units {
@@ -58,129 +58,131 @@ enum Units {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  fullName String?
-  userName String? 
-  password String 
-  role Role @default(DEVICE)
+  id               Int              @id @default(autoincrement())
+  fullName         String?
+  userName         String?
+  password         String
+  role             Role             @default(DEVICE)
   quality_controls QualityControl[]
 }
 
 enum Role {
-  ADMIN 
-  DEVICE 
-  QUALITY 
+  ADMIN
+  DEVICE
+  QUALITY
   MANAGMENT
 }
 
 model QualityControl {
-  id Int @id @default(autoincrement())
-  process_id Int 
-  qc_date DateTime
-  inspector_id Int 
-  qc_notes String 
-  status QualityControlStatus
-  proccess Process @relation(fields: [process_id], references: [id])
-  inspector User @relation(fields: [inspector_id], references: [id])
+  id           Int                  @id @default(autoincrement())
+  process_id   Int
+  qc_date      DateTime
+  inspector_id Int
+  qc_notes     String
+  status       QualityControlStatus
+  proccess     Process              @relation(fields: [process_id], references: [id])
+  inspector    User                 @relation(fields: [inspector_id], references: [id])
 }
 
 enum QualityControlStatus {
   APPROVED
-  REJECTED 
+  REJECTED
 }
 
 model RollMaterial {
-  id Int @id @default(autoincrement())
-  material_id Int 
-  lot String 
-  lot_id Int 
-  weight Decimal
-  paper_id Int 
-  status RollMaterialStatus
+  id            Int                @id @default(autoincrement())
+  material_id   Int
+  lot           String
+  lot_id        Int
+  weight        Decimal
+  paper_id      Int
+  status        RollMaterialStatus
   materialUsage MaterialUsage[]
-  processes Process[]
-  material RawMaterial @relation(fields: [material_id], references: [id])
-  paper Paper @relation(fields: [paper_id], references: [id])
+  processes     Process[]
+  material      RawMaterial        @relation(fields: [material_id], references: [id])
+  paper         Paper              @relation(fields: [paper_id], references: [id])
+
   @@unique([lot, lot_id])
 }
 
 enum RollMaterialStatus {
-  AVAIBLE 
+  AVAIBLE
   DISABLE
   INACTIVE
 }
 
 model Process {
-  id Int @id @default(autoincrement())
-  type ProcessName 
-  start_time DateTime
-  end_time DateTime?
-  roll_material_id Int 
-  initial_weight Decimal
-  final_weight Decimal?
+  id                  Int              @id @default(autoincrement())
+  type                ProcessName
+  start_time          DateTime
+  end_time            DateTime?
+  roll_material_id    Int
+  initial_weight      Decimal
+  final_weight        Decimal?
   finished_product_id Int?
-  finished_quantity Int?
-  sale_id Int? @default(0)
-  product_id Int
-  qualityControls QualityControl[]
-  materialUsage MaterialUsage[]
-  roll_material RollMaterial @relation(fields: [roll_material_id], references: [id])
-  product Product @relation(fields: [product_id], references: [id])
+  finished_quantity   Int?
+  sale_id             Int?             @default(0)
+  product_id          Int
+  qualityControls     QualityControl[]
+  materialUsage       MaterialUsage[]
+  roll_material       RollMaterial     @relation(fields: [roll_material_id], references: [id])
+  product             Product          @relation(fields: [product_id], references: [id])
 }
 
 model MaterialUsage {
-  id Int @id @default(autoincrement())
-  process_id Int 
-  material_id Int 
-  roll_id Int?
+  id            Int           @id @default(autoincrement())
+  process_id    Int
+  material_id   Int
+  roll_id       Int?
   quantity_used Decimal
-  weight_user Decimal
-  date DateTime
-  process Process @relation(fields: [process_id], references: [id])
-  material RawMaterial @relation(fields: [material_id], references: [id])
-  roll RollMaterial? @relation(fields: [roll_id], references: [id])
+  weight_user   Decimal
+  date          DateTime
+  process       Process       @relation(fields: [process_id], references: [id])
+  material      RawMaterial   @relation(fields: [material_id], references: [id])
+  roll          RollMaterial? @relation(fields: [roll_id], references: [id])
 }
 
 enum ProcessName {
   PRINTING
-  PARAFFIN 
-  CUT 
+  PARAFFIN
+  CUT
   PACKAGING
 }
 
 model Sale {
-  id Int @id @default(autoincrement())
-  date DateTime 
-  status SaleStatus
+  id          Int           @id @default(autoincrement())
+  date        DateTime
+  status      SaleStatus
   customer_id Int
-  products SaleProduct[]
-  customer Customer @relation(fields: [customer_id], references: [id])
+  products    SaleProduct[]
+  customer    Customer      @relation(fields: [customer_id], references: [id])
 }
 
 model Customer {
-  id Int @id @default(autoincrement())
-  name String
+  id    Int    @id @default(autoincrement())
+  name  String
   sales Sale[]
 }
 
 model SaleProduct {
-  sale_id Int
-  product_id Int 
-  quantity Int
-  price Decimal
-  discount Decimal
-  status SaleProductStatus @default(ON_HOLD)
+  sale_id    Int
+  product_id Int
+  quantity   Int
+  price      Decimal
+  discount   Decimal
+  status     SaleProductStatus @default(ON_HOLD)
+  sale       Sale              @relation(fields: [sale_id], references: [id])
+  product    Product           @relation(fields: [product_id], references: [id])
+
   @@id([sale_id, product_id])
-  sale Sale @relation(fields: [sale_id], references: [id])
-  product Product @relation(fields: [product_id], references: [id])
 }
 
 enum SaleProductStatus {
-  ON_HOLD 
+  ON_HOLD
   PRINTING
   PARAFFIN
   CUT
-  PACKAGING 
+  PACKAGING
   COMPLETED
   DELIVERED
 }
@@ -193,21 +195,22 @@ enum SaleStatus {
 }
 
 model Purchase {
-  id Int @id @default(autoincrement())
-  date DateTime 
-  status PurchaseStatus
+  id       Int               @id @default(autoincrement())
+  date     DateTime
+  status   PurchaseStatus
   products PurchaseProduct[]
 }
 
 model PurchaseProduct {
   purchase_id Int
-  product_id Int 
-  quantity Int
-  price Decimal
-  discount Decimal
+  product_id  Int
+  quantity    Int
+  price       Decimal
+  discount    Decimal
+  purchase    Purchase @relation(fields: [purchase_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id])
+
   @@id([purchase_id, product_id])
-  purchase Purchase @relation(fields: [purchase_id], references: [id])
-  product Product @relation(fields: [product_id], references: [id])
 }
 
 enum PurchaseStatus {

@@ -11,9 +11,9 @@ import { Colors } from '@/constants/Colors'
 import StyledButton from '@/components/StyledButton'
 import { getRolls } from '@/api/MaterialApi'
 import { getProducts } from '@/api/ProductApi'
-import { ProcessCreate, ProductType, RollMaterial } from '@/types'
+import { ProcessCreate, ProductType, RollMaterial, SaleProductType } from '@/types'
 import getPapersPicker, { getRollPicker } from '@/utils/getPapersPicker'
-import { registerProcess } from '@/api/ProcessApi'
+import { finishProcess, getProcess, registerProcess } from '@/api/ProcessApi'
 import queryClient from '@/lib/queryClient'
 
 export default function createProcess() {
@@ -23,19 +23,20 @@ export default function createProcess() {
     const [rollMaterials, setRollMaterials] = useState<RollMaterial[]>([])
     const [products, setProducts] = useState<ProductType[]>([])
 
-    const [type, setType] = useState<ProcessCreate['type']>('PRINTING')
+    const [type, setType] = useState<ProcessCreate['type'] | SaleProductType['status']>('PRINTING')
     const [initialWeight, setInitialWeight] = useState<string | undefined>()
     const [productId, setProductId] = useState<string | number>(0)
     const [rollMaterialId, setRollMaterialId] = useState<string | number>(0)
     const [lot, setLot] = useState('')
     const [lotId, setLotId] = useState('')
 
-    const { paper, product, typeUrl, sale_id, roll_id } = useLocalSearchParams<{
+    const { paper, product, typeUrl, sale_id, roll_id, process_id } = useLocalSearchParams<{
         sale_id?: string;
         paper?: string;
         product?: string;
-        typeUrl?: ProcessCreate['type']
+        typeUrl?: ProcessCreate['type'] | SaleProductType['status']
         roll_id?: string;
+        process_id?: string;
     }>();
 
     const { data: rollMaterialsApi, isLoading: rollsIsLoading } = useQuery({
@@ -43,9 +44,28 @@ export default function createProcess() {
         queryFn: getRolls
     })
 
+    const { data: processApi, isLoading: IsLoadingProcess } = useQuery({
+        queryKey: ['process'], 
+        queryFn: getProcess
+    })
+
     const { data: productsApi, isLoading: productsIsLoading } = useQuery({
         queryKey: ['products'], 
         queryFn: getProducts
+    })
+
+    const { mutate: finishedProcess } = useMutation({
+        mutationFn: finishProcess, 
+        onError: (error) => {
+            Alert.alert('Hubo un error', error.message, [
+                {text: 'Aceptar', style: 'cancel'}
+            ])
+        }, 
+        onSuccess: () => {
+            mutate({
+                roll_material_id: +rollMaterialId, initial_weight: +initialWeight!, product_id: +productId, type: type, sale_id: +sale_id!
+            })
+        }
     })
 
     const { mutate } = useMutation({
@@ -62,15 +82,28 @@ export default function createProcess() {
                 {text: 'Aceptar', style: 'default'}
             ])
 
-            queryClient.invalidateQueries({queryKey: ['pendingProcess']})
+            queryClient.invalidateQueries({queryKey: [['pendingProcess'], ['process']]})
 
             router.back()
         }, 
     })
 
-    const handleForm = () => mutate({
-        roll_material_id: +rollMaterialId, initial_weight: +initialWeight!, product_id: +productId, type: type, sale_id: +sale_id!
-    })
+    const handleForm = () => {
+        if(typeUrl !== 'ON_HOLD' && typeUrl) {
+            finishedProcess({
+                data: {
+                    ...processApi?.filter(item => +item.id === +process_id!)[0]!, 
+                    end_time: new Date().toISOString(), 
+                    final_weight: +initialWeight!
+                }, processId: +process_id!
+            })
+        } else {
+            mutate({
+                roll_material_id: +rollMaterialId, initial_weight: +initialWeight!, product_id: +productId, type: type, sale_id: +sale_id!
+            })
+        }
+        
+    }
 
     const handleBarCodeScanned = ({ data }: { data: string }) => {
         setLot(data.slice(0, 4)) 
@@ -89,7 +122,7 @@ export default function createProcess() {
     const checkRoll = (id: number) => {
         if(id && paper) {
             const roll = rollMaterials.filter(roll => roll.id === id)[0]
-    
+            console.log(roll)
             if(+roll.paper_id !== +paper!) {
                 Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
                     {text: 'Aceptar', style: 'cancel'}
@@ -126,7 +159,9 @@ export default function createProcess() {
     }, [product, paper, typeUrl, roll_id])
 
     useEffect(() => {
-        if(rollMaterialId && paper) {
+        if((rollMaterialId !== 0 || rollMaterialId !== undefined) && paper !== undefined) {
+            //ALAVERGA TODO
+            console.log((rollMaterialId !== 0 || rollMaterialId !== undefined))
             const roll = rollMaterials.filter(roll => roll.id === +rollMaterialId)[0]
 
             if(+roll?.paper_id !== +paper!) {
@@ -140,8 +175,6 @@ export default function createProcess() {
 
             setInitialWeight(roll.weight.toString())
         }
-
-        
     }, [rollMaterialId])
 
     useEffect(() => {

@@ -45,6 +45,7 @@ export async function finishProcess(formData: { data: ProcessType, processId: nu
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
         }  
+        throw new Error('Unexpected error'); 
     }
 }
 

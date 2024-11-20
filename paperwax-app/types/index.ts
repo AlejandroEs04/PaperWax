@@ -55,12 +55,13 @@ export type ProductType = {
     description: string;
     paper_id: number;
     quantity: number;
+    processes: ProcessType[]
     paper: Paper
 }
 
 export type ProcessType = {
     id: number;
-    type: "PRINTING" | "PARAFFIN" | "CUT" | "PACKAGING";
+    type: 'ON_HOLD' | 'PRINTING' | 'PARAFFIN' | 'CUT' | 'PACKAGING' | 'COMPLETED' | 'DELIVERED';
     start_time: string;
     end_time: string;
     roll_material_id: number;

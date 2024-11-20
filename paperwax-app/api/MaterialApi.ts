@@ -43,6 +43,7 @@ export async function createMaterial(material: RawMaterialCreate) {
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
         } 
+        throw new Error('Unexpected error'); 
     }
 }
 
@@ -54,5 +55,6 @@ export async function createRollMaterial(material: RollMaterialCreate) {
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
         } 
+        throw new Error('Unexpected error'); 
     }
 }

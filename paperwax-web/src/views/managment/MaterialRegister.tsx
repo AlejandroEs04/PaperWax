@@ -26,7 +26,7 @@ export default function MaterialRegister() {
         }, 
         onSuccess: (data) => {
             toast.success(data)
-            navigate('/')
+            navigate('/materials')
         }
     })
 

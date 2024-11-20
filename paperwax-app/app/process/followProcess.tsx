@@ -112,7 +112,7 @@ export default function followProcess() {
                     {rolls?.length ? rolls.map((process: ProcessListType) => (
                         <>
                             <TouchableOpacity
-                                onPress={() => router.push(`/process/createProcess?roll_id=${process.roll_material_id}&paper=${process.product.paper_id}&product=${process.product.id}&typeUrl=${getNextProcess(process.type)}`)}
+                                onPress={() => router.push(`/process/createProcess?roll_id=${process.roll_material_id}&paper=${process.product.paper_id}$process_id=${process.id}&product=${process.product.id}&typeUrl=${getNextProcess(process.type)}`)}
                                 key={`${process.id}`}
                                 style={[
                                 {

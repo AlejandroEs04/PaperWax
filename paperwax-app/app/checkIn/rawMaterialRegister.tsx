@@ -1,4 +1,4 @@
-import { TextInput, View, StyleSheet, Text, ActivityIndicator } from 'react-native'
+import { TextInput, View, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
