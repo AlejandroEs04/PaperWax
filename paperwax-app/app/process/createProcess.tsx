@@ -48,8 +48,8 @@ export default function createProcess() {
 
     const { mutate } = useMutation({
         mutationFn: registerProcess, 
-        onError: () => {
-            Alert.alert('Hubo un error', 'Hubo un error al tratar de registrar el proceso', [
+        onError: (error) => {
+            Alert.alert('Hubo un error', error.message, [
                 {text: 'Aceptar', style: 'cancel'}
             ])
         }, 
