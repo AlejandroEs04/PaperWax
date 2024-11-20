@@ -1,3 +1,5 @@
+import { BottomTabDescriptor } from "@react-navigation/bottom-tabs/lib/typescript/commonjs/src/types"
+
 export type Paper = {
     id: number 
     name: string
@@ -71,3 +73,5 @@ export type ProcessType = {
 }
 
 export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id'>
+
+export type BottomTabDescriptorMap = Record<string, BottomTabDescriptor>;

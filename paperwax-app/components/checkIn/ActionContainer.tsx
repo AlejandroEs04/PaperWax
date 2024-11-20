@@ -2,14 +2,14 @@ import { View, StyleSheet, ViewProps, TouchableOpacity, Text } from 'react-nativ
 import { Colors } from '@/constants/Colors';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react'
-import { Link, router } from 'expo-router';
+import { ExternalPathString, Href, Link, RelativePathString, router } from 'expo-router';
 import { ThemedText } from '../ThemedText';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { type ComponentProps } from 'react';
 import { type IconProps } from '@expo/vector-icons/build/createIconSet';
 
 export type ActionContainerProps = ViewProps & {
-    href: string
+    href: Href
     text: string
     icon: IconProps<ComponentProps<typeof Ionicons>['name']>['name']
     lightColor?: string

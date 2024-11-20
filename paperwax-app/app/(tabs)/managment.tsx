@@ -14,15 +14,15 @@ export default function managment() {
 
             <View style={{marginTop: 15, display: 'flex', gap: 5}}>
                 <ActionContainer 
-                href='checkIn/rollRegister'
-                text='Registrar rollos'
-                icon='barcode-outline'
+                    href='/checkIn/rollRegister'
+                    text='Registrar rollos'
+                    icon='barcode-outline'
                 />
 
                 <ActionContainer 
-                href='checkIn/rawMaterialRegister'
-                text='Registrar materia prima'
-                icon='book-outline'
+                    href='/checkIn/rawMaterialRegister'
+                    text='Registrar materia prima'
+                    icon='book-outline'
                 />
             </View>
 
@@ -31,33 +31,33 @@ export default function managment() {
 
             <View style={{marginTop: 15, display: 'flex', gap: 5}}>
                 <ActionContainer 
-                href='process/followProcess'
-                text='Seguir Proceso'
-                icon='camera-outline'
+                    href='/process/followProcess'
+                    text='Seguir Proceso'
+                    icon='camera-outline'
                 />
 
                 <ActionContainer 
-                href='process/createProcess'
-                text='Iniciar Proceso'
-                icon='add-outline'
+                    href='/process/createProcess'
+                    text='Iniciar Proceso'
+                    icon='add-outline'
                 />
 
                 <ActionContainer 
-                href='process/createPrinting'
-                text='Imprenta'
-                icon='print-outline'
+                    href='/process/createPrinting'
+                    text='Imprenta'
+                    icon='print-outline'
                 />
 
                 <ActionContainer 
-                href='process/createParaffin'
-                text='Parafinado'
-                icon='settings-outline'
+                    href='/process/createParaffin'
+                    text='Parafinado'
+                    icon='settings-outline'
                 />
 
                 <ActionContainer 
-                href='checkIn/rollRegister'
-                text='Cortado'
-                icon='cut-outline'
+                    href='/checkIn/rollRegister'
+                    text='Cortado'
+                    icon='cut-outline'
                 />
             </View>
         </ThemedView>

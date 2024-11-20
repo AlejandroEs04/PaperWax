@@ -43,12 +43,12 @@ export default function rollRegister() {
 
     const { mutate } = useMutation({
         mutationFn: createRollMaterial, 
-        onError: (error) => {
+        onError: () => {
             Alert.alert('Hubo un error', 'Hubo un error al tratar de registrar el rollo', [
                 {text: 'Aceptar', style: 'cancel'}
             ])
         }, 
-        onSuccess: (data) => {
+        onSuccess: (data : string) => {
             Vibration.vibrate()
 
             Alert.alert('Rollo registrado con exito', data, [

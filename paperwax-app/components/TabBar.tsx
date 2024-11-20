@@ -4,27 +4,42 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 import { TabBarIcon } from './navigation/TabBarIcon';
+import type {
+    BottomTabNavigationEventMap, 
+  } from '@react-navigation/bottom-tabs';
+  import type {
+    
+    TabNavigationState,
+    ParamListBase,
+    NavigationHelpers,
+  } from '@react-navigation/native';
+import { BottomTabDescriptorMap } from '@/types';
 
-const TabBar = ({ state, descriptors, navigation, lightColor, darkColor }) => {
+type TabBarProps = { 
+    state: TabNavigationState<ParamListBase>; 
+    descriptors: BottomTabDescriptorMap; 
+    navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
+}
+
+type CustomIconName = "person-circle" | "person-circle-outline" | "home" | "home-outline" | "book" | "book-outline";
+
+
+const TabBar = ({ state, descriptors, navigation } : TabBarProps) => {
     const backgroundColor = useThemeColor({ light: Colors.light.container, dark: Colors.dark.container }, 'background')
     const textColor = useThemeColor({ light: Colors.light.text, dark: Colors.dark.text }, 'background')
 
-    const icons = {
-        Cuenta: {outline: 'person-circle', normal: 'person-circle-outline'}, 
-        Inicio: {outline: 'home', normal: 'home-outline'}, 
-        Registros: {outline: 'book', normal: 'book-outline'}, 
-    }
+    const icons: Record<string, { outline: string; normal: string }> = {
+        Cuenta: { outline: 'person-circle', normal: 'person-circle-outline' },
+        Inicio: { outline: 'home', normal: 'home-outline' },
+        Registros: { outline: 'book', normal: 'book-outline' },
+    };
+    
 
     return (
         <View style={[{backgroundColor}, styles.tabBar]}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
-                const label =
-                options.tabBarLabel !== undefined
-                    ? options.tabBarLabel
-                    : options.title !== undefined
-                    ? options.title
-                    : route.name;
+                const label = (options.tabBarLabel ?? options.title ?? route.name) as keyof typeof icons;
 
                 const isFocused = state.index === index;
 
@@ -47,23 +62,29 @@ const TabBar = ({ state, descriptors, navigation, lightColor, darkColor }) => {
                     });
                 };
 
-                return (
-                    <TouchableOpacity
-                        key={route.name}
-                        style={styles.tabBarItem}
-                        accessibilityRole="button"
-                        accessibilityState={isFocused ? { selected: true } : {}}
-                        accessibilityLabel={options.tabBarAccessibilityLabel}
-                        testID={options.tabBarTestID}
-                        onPress={onPress}
-                        onLongPress={onLongPress}
-                    >
-                        <TabBarIcon style={{ marginBottom: -3 }} name={isFocused ? icons[label].outline : icons[label].normal} color={isFocused ? Colors.primary.textPrimaryLight : textColor} />
-                        <ThemedText style={isFocused && { color: Colors.primary.textPrimaryLight }}>
-                            {label}
-                        </ThemedText>
-                    </TouchableOpacity>
-                )
+                if (typeof label === 'string' && label in icons) {
+                    const iconName = isFocused ? icons[label].outline : icons[label].normal;
+                    return (
+                        <TouchableOpacity
+                            key={route.name}
+                            style={styles.tabBarItem}
+                            accessibilityRole="button"
+                            accessibilityState={isFocused ? { selected: true } : {}}
+                            accessibilityLabel={options.tabBarAccessibilityLabel}
+                            onPress={onPress}
+                            onLongPress={onLongPress}
+                        >
+                            <TabBarIcon
+                                style={{ marginBottom: -3 }}
+                                name={(isFocused ? icons[label].outline : icons[label].normal) as CustomIconName}
+                                color={isFocused ? Colors.primary.textPrimaryLight : textColor}
+                            />
+                            <ThemedText style={isFocused && { color: Colors.primary.textPrimaryLight }}>
+                                {label}
+                            </ThemedText>
+                        </TouchableOpacity>
+                    );
+                }
             })}
         </View>
     )

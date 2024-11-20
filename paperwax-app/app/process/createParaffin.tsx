@@ -39,12 +39,12 @@ export default function createParaffin() {
 
     const { mutate } = useMutation({
         mutationFn: registerProcess, 
-        onError: (error) => {
+        onError: () => {
             Alert.alert('Hubo un error', 'Hubo un error al tratar de registrar el proceso', [
                 {text: 'Aceptar', style: 'cancel'}
             ])
         }, 
-        onSuccess: (data) => {
+        onSuccess: (data : string) => {
             Vibration.vibrate()
 
             Alert.alert('Proceso registrado con exito', data, [

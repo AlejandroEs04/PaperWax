@@ -1,11 +1,13 @@
 import { Tabs, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react';
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import TabBar from '@/components/TabBar';
 import * as SecureStore from 'expo-secure-store';
+
+const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);

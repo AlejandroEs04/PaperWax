@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, JSXElementConstructor, ReactElement, ReactNode, ReactPortal } from 'react'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
 import { CameraView, Camera } from 'expo-camera'
 import { router } from 'expo-router'
-import { View, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import StyledButton from '@/components/StyledButton'
 import { useQuery } from '@tanstack/react-query'
 import { getProcess } from '@/api/ProcessApi'
-import { ProcessType, RollMaterial } from '@/types'
+import { ProcessType } from '@/types'
 import formatDate from '@/utils/formatDate'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Colors } from '@/constants/Colors'
@@ -45,7 +45,7 @@ export default function followProcess() {
     useEffect(() => {
         const lot = rollId.slice(0, 4)
         const lot_id = rollId.slice(4)
-        const newArray = data?.filter(process => process.roll_material.lot === lot && process.roll_material.lot_id === +lot_id)
+        const newArray = data?.filter((item: { roll_material: { lot: string; lot_id: number } }) => item.roll_material.lot === lot && item.roll_material.lot_id === +lot_id)
 
         if(newArray) 
             setRolls(newArray)
@@ -69,7 +69,7 @@ export default function followProcess() {
                 <ThemedText>Para seguir un proceso, ingrese el rollo que busca</ThemedText>
 
                 <View>
-                    {data?.length ? data.map(process => (
+                    {data?.length ? data.map((process: { id: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; type: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; product: { name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined }; start_time: string }) => (
                         <View style={[styles.processContainer, {backgroundColor}]}>
                             <View style={{ width: '50%', display: 'flex', gap: 4 }}>
                                 <ThemedText style={styles.processContainerText}>ID: {process.id}</ThemedText>

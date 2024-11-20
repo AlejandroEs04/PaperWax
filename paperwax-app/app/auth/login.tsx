@@ -18,10 +18,10 @@ export default function login() {
 
     const { mutate } = useMutation({
         mutationFn: authenticateUser, 
-        onError: (error) => {
+        onError: (error : Error) => {
             setError(error.message)
         }, 
-        onSuccess: async(data) => {
+        onSuccess: async(data : string) => {
             await SecureStore.setItemAsync('authToken', data)
             router.replace('/(tabs)')
         }
