@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Alert, Vibration } from 'react-native'
 import { CameraView, Camera } from 'expo-camera'
+import { useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
@@ -27,6 +28,13 @@ export default function createProcess() {
     const [rollMaterialId, setRollMaterialId] = useState<string | number>(0)
     const [lot, setLot] = useState('')
     const [lotId, setLotId] = useState('')
+
+    const { paper, product, typeUrl, sale_id } = useLocalSearchParams<{
+        sale_id?: string;
+        paper?: string;
+        product?: string;
+        typeUrl?: ProcessCreate['type']
+    }>();
 
     const { data: rollMaterialsApi, isLoading: rollsIsLoading } = useQuery({
         queryKey: ['rolls'], 
@@ -55,7 +63,7 @@ export default function createProcess() {
     })
 
     const handleForm = () => mutate({
-        roll_material_id: +rollMaterialId, initial_weight: +initialWeight!, product_id: +productId, type: type
+        roll_material_id: +rollMaterialId, initial_weight: +initialWeight!, product_id: +productId, type: type, sale_id: +sale_id!
     })
 
     const handleBarCodeScanned = ({ data }: { data: string }) => {
@@ -72,22 +80,60 @@ export default function createProcess() {
         }
     }, [rollMaterialsApi, productsApi])
 
+    const checkRoll = (id: number) => {
+        if(id && paper) {
+            const roll = rollMaterials.filter(roll => roll.id === id)[0]
+    
+            if(+roll.paper_id !== +paper!) {
+                Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
+                    {text: 'Aceptar', style: 'cancel'}
+                ])
+
+                setRollMaterialId(0)
+                return false
+            }
+            setInitialWeight(roll.weight.toString())
+        }
+
+        return true
+    }
+
     useEffect(() => {
         const roll = rollMaterials.filter(roll => roll.lot === lot && roll.lot_id === +lotId && roll.status === 'AVAIBLE')
-        if(roll.length) {
+
+        if(roll.length && checkRoll(roll[0].id)) {
             Vibration.vibrate()
             setRollMaterialId(roll[0].id)
-        } else if(roll.length === 0 && lot && lotId) {
-            Alert.alert('Rollo no disponible', 'El rollo ya fue usado o no esta disponible', [
-                {text: 'Aceptar', style: 'cancel'}
-            ])
-
-            setRollMaterialId(0)
-            setLot('')
-            setLotId('')
-            setShowCamera(false)
         }
     }, [lot, lotId])
+
+    useEffect(() => {
+        if(product) {
+            setProductId(+product)
+        }
+        if(typeUrl) {
+            setType(typeUrl)
+        }
+    }, [product, paper])
+
+    useEffect(() => {
+        if(rollMaterialId && paper) {
+            const roll = rollMaterials.filter(roll => roll.id === rollMaterialId)[0]
+    
+            if(+roll.paper_id !== +paper!) {
+                Alert.alert('Rollo Incorrecto', 'El tipo de rollo seleccionado no es el correcto', [
+                    {text: 'Aceptar', style: 'cancel'}
+                ])
+
+                setRollMaterialId(0)
+                return
+            }
+
+            setInitialWeight(roll.weight.toString())
+        }
+
+        
+    }, [rollMaterialId])
 
     useEffect(() => {
         (async () => {
@@ -152,28 +198,21 @@ export default function createProcess() {
         
             <View style={styles.form}>
                 <ThemedText>Rollo</ThemedText>
-                {(rollMaterials && !rollMaterialId) ? (
-                    <RNPickerSelect
-                        onValueChange={(value) => {
-                            setLot(rollMaterials.filter(roll => roll.id === +value)[0]?.lot)
-                            setLotId(rollMaterials.filter(roll => roll.id === +value)[0]?.lot_id.toString())
-                            setRollMaterialId(value)
-                        }}
-                        items={getRollPicker(rollMaterials)}
-                        style={pickerSelectStyles}
-                    />
-                ) : (
-                    <>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Rollo Seleccionado"
-                            value={lot + "" + lotId}
-                        />
-                    </>
-                )}
+                <RNPickerSelect
+                    value={rollMaterialId}
+                    onValueChange={(value) => {
+                        setLot(rollMaterials.filter(roll => roll.id === +value)[0]?.lot)
+                        setLotId(rollMaterials.filter(roll => roll.id === +value)[0]?.lot_id.toString())
+                        setRollMaterialId(value)
+                    }}
+                    items={getRollPicker(rollMaterials)}
+                    style={pickerSelectStyles}
+                />
+
                 <ThemedText>Producto</ThemedText>
                 {products && (
                     <RNPickerSelect
+                        value={productId}
                         onValueChange={(value) => setProductId(value)}
                         items={getPapersPicker(products)}
                         style={pickerSelectStyles}
@@ -182,10 +221,13 @@ export default function createProcess() {
                 <ThemedText>Proceso</ThemedText>
                 {products && (
                     <RNPickerSelect
+                        value={type}
                         onValueChange={(value) => setType(value)}
                         items={[
                             {label: 'Impresión', value: 'PRINTING'},
-                            {label: 'Parafinado', value: 'PARAFFIN'}
+                            {label: 'Parafinado', value: 'PARAFFIN'},
+                            {label: 'Cortado', value: 'CUT'},
+                            {label: 'Empaquetado', value: 'PACKAGING'}
                         ]}
                         style={pickerSelectStyles}
                     />

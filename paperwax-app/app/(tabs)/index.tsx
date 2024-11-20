@@ -41,33 +41,35 @@ export default function HomeScreen() {
         onPress={() => router.push('/process/createProcess')}
       />
 
-      {data?.length ? data.map(item => (
-        <TouchableOpacity
-          style={[
-            {
-              padding: 15,
-              borderRadius: 10
-            },
-            {backgroundColor}
-          ]}
-        >
-          <View style={{display: 'flex', flexDirection: 'row'}}>
-            <View style={{width: '60%'}}>
-              <ThemedText type='secondary'>Nombre: {item.product.name}</ThemedText>
-              <ThemedText type='secondary' style={{marginTop: 5}}>Paper: {item.product.paper.name}</ThemedText>
+      <View style={{gap: 10}}>
+        {data?.length ? data.map(item => (
+          <TouchableOpacity
+            onPress={() => router.push(`/process/createProcess?sale_id=${item.sale_id}&paper=${item.product.paper_id}&product=${item.product.id}&typeUrl=PRINTING`)}
+            key={`${item.sale_id}-${item.product.id}`}
+            style={[
+              {
+                padding: 15,
+                borderRadius: 10
+              },
+              {backgroundColor}
+            ]}
+          >
+            <View style={{display: 'flex', flexDirection: 'row'}}>
+              <View style={{width: '60%'}}>
+                <ThemedText type='secondary'>Nombre: {item.product.name}</ThemedText>
+                <ThemedText type='secondary' style={{marginTop: 5}}>Paper: {item.product.paper.name}</ThemedText>
+              </View>
+              
+              <View style={{width: '40%'}}>
+                <ThemedText type='secondary' style={{textAlign: 'right'}}>Cantidad: {item.quantity}</ThemedText>
+                <ThemedText type='secondary' style={{textAlign: 'right'}}>Status: {Status[item.status]}</ThemedText>
+              </View>
             </View>
-            
-            <View style={{width: '40%'}}>
-              <ThemedText type='secondary' style={{textAlign: 'right'}}>Cantidad: {item.quantity}</ThemedText>
-              <ThemedText type='secondary' style={{textAlign: 'right'}}>Status: {Status[item.status]}</ThemedText>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )) : (
-        <ThemedText>No hay productos</ThemedText>
-      )}
-
-      
+          </TouchableOpacity>
+        )) : (
+          <ThemedText>No hay productos</ThemedText>
+        )}
+      </View>
     </ThemedView>
   );
 }

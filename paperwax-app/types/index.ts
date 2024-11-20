@@ -70,10 +70,11 @@ export type ProcessType = {
     finished_quantity: number;
     product_id: number;
     product: ProductType
-    roll_material: RollMaterial
+    roll_material: RollMaterial, 
+    sale_id?: number
 }
 
-export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id'>
+export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id' | 'sale_id'>
 
 export type BottomTabDescriptorMap = Record<string, BottomTabDescriptor>;
 

@@ -25,7 +25,7 @@ export default function ProductRegister() {
         }, 
         onSuccess: (data) => {
             toast.success(data)
-            navigate('/inventory')
+            navigate('/products')
         }
     })
 

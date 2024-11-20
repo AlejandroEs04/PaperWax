@@ -43,21 +43,27 @@ export default function managment() {
                 />
 
                 <ActionContainer 
-                    href='/process/createPrinting'
+                    href='/process/createProcess?typeUrl=PRINTING'
                     text='Imprenta'
                     icon='print-outline'
                 />
 
                 <ActionContainer 
-                    href='/process/createParaffin'
+                    href='/process/createProcess?typeUrl=PARAFFIN'
                     text='Parafinado'
                     icon='settings-outline'
                 />
 
                 <ActionContainer 
-                    href='/checkIn/rollRegister'
+                    href='/process/createProcess?typeUrl=CUT'
                     text='Cortado'
                     icon='cut-outline'
+                />
+
+                <ActionContainer 
+                    href='/process/createProcess?typeUrl=PACKAGING'
+                    text='Empaquetado'
+                    icon='bag-outline'
                 />
             </View>
         </ThemedView>

@@ -13,6 +13,39 @@ export class ProcessController {
         const process : ProcessCreate = new Process(req.body)
 
         try {
+            const processExists = await prisma.process.findMany({
+                where: {
+                    roll_material_id: +process.roll_material_id, 
+                    type: process.type
+                }
+            })
+
+            if(processExists.length) {
+                res.status(401).send('Este proceso ya no esta disponible')
+                return
+            }
+
+            if(req.body.sale_id) {
+                const saleProductProccess = await prisma.saleProduct.findMany({
+                    where: {
+                        sale_id: +req.body.sale_id,
+                        product_id: +process.product_id
+                    }
+                })
+    
+                if(saleProductProccess.length === 0) {
+                    res.status(401).send('Esta accion no esta permitida')
+                    return
+                }
+    
+                const processExists = saleProductProccess.filter(process => process.status === process.status)
+    
+                if(processExists.length) {
+                    res.status(401).send('Este proceso ya no esta disponible')
+                    return
+                }
+            }
+
             await prisma.process.create({
                 data: {
                     type: process.type, 
@@ -22,6 +55,20 @@ export class ProcessController {
                     product_id: +process.product_id
                 }
             })
+
+            if(req.body.sale_id) {
+                await prisma.saleProduct.update({
+                    where: {
+                        sale_id_product_id: {
+                            sale_id: +req.body.sale_id, 
+                            product_id: process.product_id
+                        }
+                    }, 
+                    data: {
+                        status: process.type
+                    }
+                })
+            }
             res.send('Proceso registrado correctamente')
         } catch (error) {
             console.log(error)

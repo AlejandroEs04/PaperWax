@@ -77,15 +77,6 @@ export default function createParaffin() {
             Vibration.vibrate()
             
             setRollMaterialId(roll[0].id)
-        } else if(roll.length === 0 && lot && lotId) {
-            Alert.alert('Rollo no disponible', 'El rollo ya fue usado o no esta disponible', [
-                {text: 'Aceptar', style: 'cancel'}
-            ])
-
-            setRollMaterialId(0)
-            setLot('')
-            setLotId('')
-            setShowCamera(false)
         }
     }, [lot, lotId])
 

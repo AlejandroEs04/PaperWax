@@ -24,14 +24,15 @@ export async function getProcessById(id: number) {
     }
 }
 
-export async function registerProcess(process: ProcessCreate) {
+export async function registerProcess(process: ProcessCreate): Promise<string> {
     try {
         const { data } = await api.post<string>('/process', process)
         return data
     } catch (error) {
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
-        }  
+        } 
+        throw new Error('Unexpected error'); 
     }
 }
 
