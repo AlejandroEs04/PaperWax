@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { ProcessCreate, ProcessType } from "../types";
+import { ProcessCreate, ProcessType, SaleProductType } from "../types";
 
 export async function getProcess() {
     try {
@@ -43,5 +43,16 @@ export async function finishProcess(formData: { data: ProcessType, processId: nu
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
         }  
+    }
+}
+
+export async function getPendingProcess() {
+    try {
+        const { data } = await api<SaleProductType[]>(`/sales/products/all`)
+        return data
+    } catch (error) {
+        if(isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
     }
 }

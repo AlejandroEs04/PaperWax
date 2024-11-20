@@ -1,12 +1,23 @@
-import { StyleSheet, View } from 'react-native'
-import ActionContainer from '@/components/checkIn/ActionContainer'
+import { useQuery } from '@tanstack/react-query'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { Colors } from '@/constants/Colors';
 import StyledButton from '@/components/StyledButton';
 import { router } from 'expo-router';
+import { getPendingProcess } from '@/api/ProcessApi';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export default function HomeScreen() {
+  const backgroundColor = useThemeColor({ light: Colors.light.container, dark: Colors.dark.container }, 'background');
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['pendingProcess'], 
+    queryFn: getPendingProcess
+  })
+
+  if(isLoading) return <ActivityIndicator />
+
   return (
     <ThemedView>
       <ThemedText type='title' style={{ color: Colors.primary.textPrimaryLight, fontWeight: 'bold' }}>PaperWax App</ThemedText>
@@ -19,6 +30,32 @@ export default function HomeScreen() {
         title='+ Iniciar Proceso'
         onPress={() => router.push('/process/createProcess')}
       />
+
+      {data?.length ? data.map(item => (
+        <TouchableOpacity
+          style={[
+            {
+              padding: 15,
+              borderRadius: 10
+            },
+            {backgroundColor}
+          ]}
+        >
+          <View style={{display: 'flex', flexDirection: 'row'}}>
+            <View style={{width: '60%'}}>
+              <ThemedText type='secondary'>Nombre: {item.product.name}</ThemedText>
+              <ThemedText type='secondary' style={{marginTop: 5}}>Paper: {item.product.paper.name}</ThemedText>
+            </View>
+            
+            <View style={{width: '40%'}}>
+              <ThemedText type='secondary' style={{textAlign: 'right'}}>Cantidad: {item.quantity}</ThemedText>
+            </View>
+          </View>
+          
+        </TouchableOpacity>
+      )) : (
+        <ThemedText>No hay productos</ThemedText>
+      )}
 
       
     </ThemedView>

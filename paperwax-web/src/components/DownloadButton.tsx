@@ -26,7 +26,7 @@ export const DownloadButton = ({onHide} : DownloadButtonProps) => {
         const data = await getPrintProcess(type, month)
         if(data) exportToExcel(data!, `Producttion_${type}`)
       } catch (error) {
-          toast.error(error!.message)
+          toast.error('Hubo un error')
       } finally {
         setIsLoading(false)
         onHide()

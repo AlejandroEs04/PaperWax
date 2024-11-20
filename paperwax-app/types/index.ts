@@ -55,6 +55,7 @@ export type ProductType = {
     description: string;
     paper_id: number;
     quantity: number;
+    paper: Paper
 }
 
 export type ProcessType = {
@@ -75,3 +76,9 @@ export type ProcessType = {
 export type ProcessCreate = Pick<ProcessType, 'initial_weight' | 'product_id' | 'type' | 'roll_material_id'>
 
 export type BottomTabDescriptorMap = Record<string, BottomTabDescriptor>;
+
+export type SaleProductType = {
+    sale_id: number 
+    quantity: number
+    product: ProductType
+}

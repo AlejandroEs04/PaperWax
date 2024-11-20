@@ -1,6 +1,5 @@
 import { Router } from "express"
 import { SaleController } from "../controllers/SaleController"
-import { ro } from "date-fns/locale"
 
 const router = Router()
 
