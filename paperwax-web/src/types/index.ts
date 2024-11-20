@@ -97,7 +97,7 @@ export const saleProductSchema = z.object({
 export type SaleProductType = z.infer<typeof saleProductSchema>
 
 export type SaleType = z.infer<typeof saleSchema>
-export type SaleCreate = Pick<SaleType, 'date' | 'status' | 'customer_id' | 'products'>
+export type SaleCreate = Pick<SaleType, 'date' | 'status' | 'customer_id'>
 
 export type SaleRegister = SaleCreate & {
     products: Pick<SaleProductType, 'discount' | 'price' | 'product_id' | 'quantity'>[]

@@ -12,7 +12,12 @@ class ProductController {
         const product = new Product_1.default(req.body);
         try {
             await prisma.product.create({
-                data: product
+                data: {
+                    name: product.name,
+                    description: product.description,
+                    paper_id: +product.paper_id,
+                    quantity: +product.quantity
+                }
             });
             res.send('Producto dado de alta correctamente');
         }

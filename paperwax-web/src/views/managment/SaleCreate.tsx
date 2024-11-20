@@ -40,7 +40,18 @@ export default function SaleCreate() {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
-    const handleForm = (data : SaleRegister) => mutate({ ...data, products: products })
+    const handleForm = (data : SaleRegister) => {
+        const newProducts : SaleRegister['products'] = products.map(item => {
+            return {
+                discount: item.discount, 
+                price: item.price, 
+                product_id: item.product_id, 
+                quantity: item.quantity
+            }
+        })
+
+        mutate({ ...data, products: newProducts })
+    }
 
     return (
         <>

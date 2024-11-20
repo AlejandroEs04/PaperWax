@@ -35,7 +35,7 @@ class AuthController {
             let dbUser;
             if (id) {
                 dbUser = await prisma.user.findFirst({
-                    where: { id }
+                    where: { id: +id }
                 });
             }
             else if (userName) {

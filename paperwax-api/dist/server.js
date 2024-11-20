@@ -11,7 +11,9 @@ const ProductRoutes_1 = __importDefault(require("./routes/ProductRoutes"));
 const PaperRoutes_1 = __importDefault(require("./routes/PaperRoutes"));
 const RawMaterialRoutes_1 = __importDefault(require("./routes/RawMaterialRoutes"));
 const RollMaterialRoutes_1 = __importDefault(require("./routes/RollMaterialRoutes"));
+const ProcessRoutes_1 = __importDefault(require("./routes/ProcessRoutes"));
 const AuthRouter_1 = __importDefault(require("./routes/AuthRouter"));
+const SaleRoutes_1 = __importDefault(require("./routes/SaleRoutes"));
 const cors_2 = require("./config/cors");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -24,5 +26,7 @@ app.use('/api/papers', PaperRoutes_1.default);
 app.use('/api/raw-material', RawMaterialRoutes_1.default);
 app.use('/api/roll-material', RollMaterialRoutes_1.default);
 app.use('/api/auth', AuthRouter_1.default);
+app.use('/api/process', ProcessRoutes_1.default);
+app.use('/api/sales', SaleRoutes_1.default);
 exports.default = app;
 //# sourceMappingURL=server.js.map

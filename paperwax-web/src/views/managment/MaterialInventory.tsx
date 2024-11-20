@@ -8,7 +8,6 @@ import RollMaterialTable from '../../components/RollMaterialTable'
 
 export default function MaterialInventory() {
     const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]) 
-    const [rollMaterials, setRollMaterials] = useState<RawMaterial[]>([]) 
 
     const { data, isLoading } = useQuery({
         queryKey: ['raw-materials'], 
@@ -18,7 +17,6 @@ export default function MaterialInventory() {
     useEffect(() => {
         if(data?.length) {
             setRawMaterials(data?.filter(material => material.type_id !== 3))
-            setRollMaterials(data?.filter(material => material.type_id === 3))
         }
     }, [data])
 

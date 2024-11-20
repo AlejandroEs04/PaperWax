@@ -3,7 +3,7 @@ import { exportToExcel } from '../utils/exportToExcel';
 import { getPrintProcess } from '../api/ProcessApi';
 import { toast } from 'react-toastify';
 import Loader from './Loader';
-import { ProcessType, SaleType } from '../types';
+import { ProcessType } from '../types';
 
 type DownloadButtonProps = {
   onHide: () => void
